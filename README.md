@@ -4,7 +4,7 @@ with https://github.com/Warxcell/excimer-ui-server.
 Just decorate your app handler. (Example from Symfony APP)
 
 ```php
-$services->set(\\Warxcell\ExcimerHandler\SpeedscopeDataSender::class)->args([
+$services->set(\Warxcell\ExcimerHandler\SpeedscopeDataSender::class)->args([
    '$url' => 'https://your-on-premise-installation.com/profile',
 ]);
         
