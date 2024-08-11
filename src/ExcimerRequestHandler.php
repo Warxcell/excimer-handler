@@ -7,32 +7,20 @@ namespace Warxcell\ExcimerPsrHandler;
 use ExcimerProfiler;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 
-use function http_build_query;
-use function json_encode;
-
 use const EXCIMER_REAL;
-use const JSON_THROW_ON_ERROR;
-use const JSON_UNESCAPED_SLASHES;
-use const JSON_UNESCAPED_UNICODE;
 
 // https://www.speedscope.app/
 final readonly class ExcimerRequestHandler implements RequestHandlerInterface
 {
     public function __construct(
         private RequestHandlerInterface $handler,
-        private string $url,
         private LoggerInterface $logger,
-        private ClientInterface $httpClient,
-        private RequestFactoryInterface $requestFactory,
-        private StreamFactoryInterface $streamFactory,
+        private SpeedscopeDataSender $speedscopeDataSender,
         private ProfileActivator $profileActivator = new DefaultProfileActivator(),
     ) {
     }
@@ -57,26 +45,7 @@ final readonly class ExcimerRequestHandler implements RequestHandlerInterface
             $data = $excimer->getLog()->getSpeedscopeData();
 
             try {
-                $this->httpClient->sendRequest(
-                    $this->requestFactory->createRequest('POST', $this->url)
-                        ->withBody(
-                            $this->streamFactory->createStream(
-                                http_build_query(
-                                    [
-                                        'name' => (string)$request->getUri(),
-                                        'data' => json_encode(
-                                            $data,
-                                            flags: JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR,
-                                            depth: 2048
-                                        ),
-                                    ],
-                                    '',
-                                    '&',
-                                    PHP_QUERY_RFC1738
-                                )
-                            )
-                        )
-                );
+                ($this->speedscopeDataSender)(name: (string)$request->getUri(), data: $data);
             } catch (ClientExceptionInterface|JsonException $exception) {
                 $this->logger->error(
                     $exception->getMessage(),
