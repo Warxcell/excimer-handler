@@ -7,6 +7,7 @@ namespace Warxcell\ExcimerHandler;
 use ExcimerProfiler;
 use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -21,6 +22,7 @@ final class ExcimerCommandHandler implements EventSubscriberInterface
 
     public function __construct(
         private readonly SpeedscopeDataSender $speedscopeDataSender,
+        private readonly LoggerInterface $logger,
         private readonly bool $enabled
     ) {
     }
