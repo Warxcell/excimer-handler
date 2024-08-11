@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Warxcell\ExcimerPsrHandler;
 
 use ExcimerProfiler;
+use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -76,7 +77,7 @@ final readonly class ExcimerRequestHandler implements RequestHandlerInterface
                             )
                         )
                 );
-            } catch (ClientExceptionInterface $exception) {
+            } catch (ClientExceptionInterface|JsonException $exception) {
                 $this->logger->error(
                     $exception->getMessage(),
                     [
