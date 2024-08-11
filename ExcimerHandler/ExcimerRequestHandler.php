@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Warxcell\ExcimerPsrHandler;
+namespace Warxcell\ExcimerHandler;
 
 use ExcimerProfiler;
 use JsonException;

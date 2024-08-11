@@ -4,11 +4,11 @@ with https://github.com/Warxcell/excimer-ui-server.
 Just decorate your app handler. (Example from Symfony APP)
 
 ```php
-$services->set(\\Warxcell\ExcimerPsrHandler\SpeedscopeDataSender::class)->args([
+$services->set(\\Warxcell\ExcimerHandler\SpeedscopeDataSender::class)->args([
    '$url' => 'https://your-on-premise-installation.com/profile',
 ]);
         
-$services->set(\Warxcell\ExcimerPsrHandler\ExcimerRequestHandler::class)
+$services->set(\Warxcell\ExcimerHandler\ExcimerRequestHandler::class)
     ->decorate(AppHandler::class)
     ->args([
         '$handler' => service('.inner'),
@@ -18,7 +18,7 @@ $services->set(\Warxcell\ExcimerPsrHandler\ExcimerRequestHandler::class)
 If you want to profile symfony commands, register following service.
 
 ```php
-$services->set(\Warxcell\ExcimerPsrHandler\ExcimerCommandHandler::class)->args([
+$services->set(\Warxcell\ExcimerHandler\ExcimerCommandHandler::class)->args([
     '$enabled' => env('PROFILE')->default('')->bool(),
 ]);
 ```

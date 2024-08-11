@@ -1,5 +1,5 @@
 {
-  "name": "warxcell/excimer-psr-handler",
+  "name": "warxcell/excimer-handler",
   "type": "library",
   "require": {
     "php": "^8.2",
@@ -15,7 +15,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Warxcell\\ExcimerPsrHandler\\": "src/"
+      "Warxcell\\ExcimerHandler\\": "src/"
     }
   },
   "authors": [

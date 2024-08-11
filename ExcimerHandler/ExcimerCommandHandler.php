@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Warxcell\ExcimerPsrHandler;
+namespace Warxcell\ExcimerHandler;
 
 use ExcimerProfiler;
 use JsonException;
@@ -25,7 +25,7 @@ final class ExcimerCommandHandler implements EventSubscriberInterface
     ) {
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             ConsoleEvents::COMMAND => 'onCommand',

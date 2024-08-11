@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Warxcell\ExcimerPsrHandler;
+namespace Warxcell\ExcimerHandler;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
