@@ -9,6 +9,10 @@
     "psr/http-factory": "^1.1",
     "psr/http-server-handler": "^1.0"
   },
+  "require-dev": {
+    "symfony/event-dispatcher": "*",
+    "symfony/console": "*"
+  },
   "autoload": {
     "psr-4": {
       "Warxcell\\ExcimerPsrHandler\\": "src/"

@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Warxcell\ExcimerPsrHandler;
 
 use ExcimerProfiler;
+use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+use function sprintf;
 
 use const EXCIMER_REAL;
 
@@ -30,7 +33,7 @@ final class ExcimerCommandHandler implements EventSubscriberInterface
         ];
     }
 
-    public function onCommand()
+    public function onCommand(): void
     {
         if (!$this->enabled) {
             return;
@@ -41,7 +44,7 @@ final class ExcimerCommandHandler implements EventSubscriberInterface
         $this->profiler->start();
     }
 
-    public function onTerminate(ConsoleTerminateEvent $event)
+    public function onTerminate(ConsoleTerminateEvent $event): void
     {
         if (!$this->profiler) {
             return;
@@ -51,7 +54,13 @@ final class ExcimerCommandHandler implements EventSubscriberInterface
         $data = $this->profiler->getLog()->getSpeedscopeData();
 
         try {
-            ($this->speedscopeDataSender)(name: $event->getCommand()->getName() ?? 'Unknown command', data: $data);
+            ($this->speedscopeDataSender)(
+                name: sprintf(
+                    'bin/console %s',
+                    $event->getCommand()->getName() ?? 'Unknown command'
+                ),
+                data: $data
+            );
         } catch (ClientExceptionInterface|JsonException $exception) {
             $this->logger->error(
                 $exception->getMessage(),
