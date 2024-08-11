@@ -27,6 +27,7 @@ declare(strict_types=1);
 
 namespace Warxcell\ExcimerHandler;
 
+use JsonException;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -51,6 +52,7 @@ final readonly class SpeedscopeDataSender
 
     /**
      * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws JsonException
      */
     public function __invoke(string $name, array $data): void
     {
