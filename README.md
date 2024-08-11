@@ -8,5 +8,6 @@ $services->set(\Warxcell\ExcimerPsrHandler\ExcimerRequestHandler::class)
     ->decorate(AppHandler::class)
     ->args([
         '$handler' => service('.inner'),
+        '$url' => 'https://your-on-premise-installation.com/profile',
     ]);
 ```
