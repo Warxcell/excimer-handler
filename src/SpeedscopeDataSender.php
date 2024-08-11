@@ -28,7 +28,6 @@ final readonly class SpeedscopeDataSender
     }
 
     /**
-     * @throws \JsonException
      * @throws \Psr\Http\Client\ClientExceptionInterface
      */
     public function __invoke(string $name, array $data): void
@@ -40,11 +39,7 @@ final readonly class SpeedscopeDataSender
                         http_build_query(
                             [
                                 'name' => $name,
-                                'data' => json_encode(
-                                    $data,
-                                    flags: JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR,
-                                    depth: 2048
-                                ),
+                                'data' => $data,
                             ],
                             '',
                             '&',
