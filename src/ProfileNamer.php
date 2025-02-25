@@ -1,12 +1,11 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Warxcell\ExcimerHandler;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-interface ProfileActivator
+interface ProfileNamer
 {
-    public function activates(ServerRequestInterface $request): bool;
+    public function getName(ServerRequestInterface $request): string;
 }

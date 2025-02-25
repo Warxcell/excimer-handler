@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final readonly class DefaultProfileActivator implements ProfileActivator
 {
-    public function __invoke(ServerRequestInterface $request): bool
+    public function activates(ServerRequestInterface $request): bool
     {
         return $request->hasHeader('x-excimer-profile') || isset($request->getQueryParams()['profile']);
     }

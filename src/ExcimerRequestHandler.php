@@ -24,12 +24,13 @@ final readonly class ExcimerRequestHandler implements RequestHandlerInterface
         private LoggerInterface $logger,
         private SpeedscopeDataSender $speedscopeDataSender,
         private ProfileActivator $profileActivator = new DefaultProfileActivator(),
+        private ProfileNamer $profileNamer = new DefaultProfileNamer(),
     ) {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $shouldProfile = ($this->profileActivator)($request);
+        $shouldProfile = $this->profileActivator->activates($request);
 
         if (!$shouldProfile) {
             return $this->handler->handle($request);
@@ -48,7 +49,7 @@ final readonly class ExcimerRequestHandler implements RequestHandlerInterface
 
             try {
                 ($this->speedscopeDataSender)(
-                    name: sprintf('%s %s', $request->getMethod(), $request->getUri()),
+                    name: $this->profileNamer->getName($request),
                     data: $data
                 );
             } catch (ClientExceptionInterface|JsonException $exception) {
