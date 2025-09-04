@@ -16,6 +16,6 @@ final readonly class RandomProfileActivator implements ProfileActivator
 
     public function activates(ServerRequestInterface $request): bool
     {
-        return mt_rand(1, 100) <= $this->percent;
+        return mt_rand(0, 100) <= $this->percent;
     }
 }
