@@ -9,7 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final readonly class RandomProfileActivator implements ProfileActivator
 {
     public function __construct(
-        private int $percent = 10
+        private int $percent
     )
     {
     }
