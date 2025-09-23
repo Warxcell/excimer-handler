@@ -10,7 +10,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 interface ContextProvider
 {
+    /**
+     * @return array<array-key, mixed>|null
+     */
     public function getCommandContext(Command $command, InputInterface $input, OutputInterface $output, int $exitCode): ?array;
 
+    /**
+     * @return array<array-key, mixed>|null
+     */
     public function getRequestContext(ServerRequestInterface $request): ?array;
 }
