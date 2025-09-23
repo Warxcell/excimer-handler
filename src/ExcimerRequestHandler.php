@@ -12,8 +12,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 
-use function sprintf;
-
 use const EXCIMER_REAL;
 
 // https://www.speedscope.app/
@@ -25,6 +23,7 @@ final readonly class ExcimerRequestHandler implements RequestHandlerInterface
         private SpeedscopeDataSender $speedscopeDataSender,
         private ProfileActivator $profileActivator = new DefaultProfileActivator(),
         private ProfileNamer $profileNamer = new DefaultProfileNamer(),
+        private ?ContextProvider $contextProvider = null,
     ) {
     }
 
@@ -50,7 +49,8 @@ final readonly class ExcimerRequestHandler implements RequestHandlerInterface
             try {
                 ($this->speedscopeDataSender)(
                     name: $this->profileNamer->getName($request),
-                    data: $data
+                    data: $data,
+                    context: $this->contextProvider?->getRequestContext($request),
                 );
             } catch (ClientExceptionInterface|JsonException $exception) {
                 $this->logger->error(

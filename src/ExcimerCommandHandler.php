@@ -9,6 +9,7 @@ use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -23,7 +24,8 @@ final class ExcimerCommandHandler implements EventSubscriberInterface
     public function __construct(
         private readonly SpeedscopeDataSender $speedscopeDataSender,
         private readonly LoggerInterface $logger,
-        private readonly bool $enabled
+        private readonly bool $enabled,
+        private readonly ?ContextProvider $contextProvider = null,
     ) {
     }
 
@@ -35,7 +37,7 @@ final class ExcimerCommandHandler implements EventSubscriberInterface
         ];
     }
 
-    public function onCommand(): void
+    public function onCommand(ConsoleCommandEvent $event): void
     {
         if (!$this->enabled) {
             return;
@@ -61,7 +63,13 @@ final class ExcimerCommandHandler implements EventSubscriberInterface
                     'bin/console %s',
                     $event->getCommand()->getName() ?? 'Unknown command'
                 ),
-                data: $data
+                data: $data,
+                context: $this->contextProvider?->getCommandContext(
+                    $event->getCommand(),
+                    $event->getInput(),
+                    $event->getOutput(),
+                    $event->getExitCode()
+                ),
             );
         } catch (ClientExceptionInterface|JsonException $exception) {
             $this->logger->error(

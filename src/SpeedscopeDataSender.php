@@ -54,7 +54,7 @@ final readonly class SpeedscopeDataSender
      * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws JsonException
      */
-    public function __invoke(string $name, array $data): void
+    public function __invoke(string $name, array $data, ?array $context = null): void
     {
         $this->httpClient->sendRequest(
             $this->requestFactory->createRequest('POST', $this->url)
@@ -63,6 +63,7 @@ final readonly class SpeedscopeDataSender
                         json_encode([
                             'name' => $name,
                             'data' => $this->utf8ize($data),
+                            'context' => $context,
                         ], flags: JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR)
                     )
                 )
